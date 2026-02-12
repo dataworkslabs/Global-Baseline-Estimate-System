@@ -1,0 +1,81 @@
+---
+title: "Assignment 3_Approach"
+author: Mark Hamer
+format: html
+editor: visual
+---
+
+# Introduction
+
+This project is about building a movie recommendation system. Basically, if someone hasn't seen a movie yet, can we predict what rating they'd give it based on their past ratings? This is what Netflix does when it suggests shows to you.
+
+I'm working with data from 16 critics who rated 6 different movies (Captain America, Deadpool, Frozen, Jungle Book, Pitch Perfect 2, and Star Wars: The Force Awakens). But not everyone rated every movie, there are gaps in the data.
+
+My specific goal is to predict what rating Param would give Pitch Perfect 2, since he hasn't rated it yet.
+
+I'm using something called Global Baseline Estimate, which is basically an algrothim used to estimate what a user will rate a certain film.
+
+By the end I'll have a working R function that can predict any critic's rating for any movie, plus the specific answer to the assignment question: what Param would rate Pitch Perfect 2.
+
+# Planned Approach
+
+**Step 1: Load and explore the data**
+I'll look at the dataset to see how many critics and movies there are, and check which ratings are missing.
+
+**Step 2: Calculate overall average**
+I'll add up all the ratings from all critics and divide by the total number of ratings to get the overall average.
+
+**Step 3: Calculate user averages**
+For each critic, I'll add up their ratings and divide by how many films they actually rated.
+
+**Step 4: Calculate movie averages**
+For each movie, I'll add up all the ratings it got and divide by how many critics rated it.
+
+**Step 5: Handle missing data**
+When a critic hasn't rated a movie, I'll mark it as NA (null), and use R code that automatically ignores these NA values when calculating averages.
+
+# Anticipated Data Challenges
+
+## Challenge 1: Missing Data
+
+**The Problem**: Not every critic rated every movie. Some cells are blank or have "?" in them.
+
+**Why it matters**: If I try to calculate an average and R thinks a blank cell is a zero, it'll mess up my calculations. Param's average would be wrong.
+
+**How I'll handle it**: I'll convert all blanks and "?" to NA (R's way of saying missing data), and use `na.rm = TRUE` in my calculations so R ignores missing values instead of treating them as zeros.
+
+## Challenge 2: Text vs Numbers
+
+**The Problem**: When R loads the Excel file, it might read the ratings as text instead of numbers, especially if there are "?" symbols or spaces in the data.
+
+**Why it matters**: You can't do math with text. If R thinks "4" is text, I can't calculate averages or add anything up. The whole algorithm breaks.
+
+**How I'll handle it**: I'll convert all the rating data to numeric format using R code, so R knows to treat them as actual numbers that can be used in calculations.
+
+## Challenge 3: Matching Names
+
+**The Problem**: The function needs exact names to look up users and movies. If I type "param" instead of "Param" or "Pitch Perfect 2" with a space instead of "PitchPerfect2", R won't find it.
+
+**Why it matters**: R is case-sensitive and doesn't ignore spaces. Even small differences mean R can't match the name, so the function will fail or return an error.
+
+**How I'll handle it**: I'll check the exact column and row names in my data using colnames() and rownames(), then make sure to use those exact names when calling my function.
+
+## Challenge 4: Users with Few Ratings
+
+**The Problem**: Some critics like Nathan only rated one or two movies.
+
+**Why it matters**: An average based on only 1 rating might not really represent how that person usually rates things.
+
+**How I'll handle it**: For this assignment, I'll calculate the average regardless of how many ratings someone has, but I'll acknowledge this is a limitation. In a real system, you might require a minimum number of ratings before trusting someone's bias.
+
+# Next Steps
+
+Now that I've outlined my approach and identified potential challenges, I'm ready to start coding. I'll:
+
+1.  Load the data and verify it looks correct
+2.  Write R code to calculate the overall average, user biases, and movie biases
+3.  Build the prediction function
+4.  Test it with Param and Pitch Perfect 2
+5.  Verify my results make sense
+
+The expected result is that Param will rate Pitch Perfect 2 somewhere around 2-3 based on my hand calculations, since both Param and the movie have negative biases.
